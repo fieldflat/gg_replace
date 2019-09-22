@@ -172,3 +172,20 @@ tbody {
   opacity: 0.5;
   cursor: none;
 }
+
+/*
+ 勝利時の表示
+*/
+.win_red {
+  font-size: 32px;
+  color: red;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.win_blue {
+  font-size: 32px;
+  color: blue;
+  text-align: center;
+  margin: 0 auto;
+}

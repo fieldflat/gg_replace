@@ -12,6 +12,7 @@ class App extends React.Component {
                    },
                    turn: "red",
                    stock_position: false,
+                   finished: false,
                   };
   }
 
@@ -77,10 +78,12 @@ class App extends React.Component {
   toggleTurn() {
     if(this.state.turn === "red") {
       this.setState({ turn: "blue" });
+      this.isFinish();
     } else if(this.state.turn === "blue") {
       this.setState({ turn: "red" });
+      this.isFinish();
     } else {
-
+      console.log("Error: toggleTurn");
     }
   }
 
@@ -105,11 +108,89 @@ class App extends React.Component {
     return piece_array, tmp_stock;
   }
 
+  isFinish() {
+    if (
+      (
+        (this.state.squares[0].slice(-1)[0].slice(0, 3) === this.state.squares[1].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[0].slice(-1)[0].slice(0, 3) === this.state.squares[2].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[0].slice(-1)[0].slice(0, 3) === "red")
+      ) || (
+        (this.state.squares[3].slice(-1)[0].slice(0, 3) === this.state.squares[4].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[3].slice(-1)[0].slice(0, 3) === this.state.squares[5].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[3].slice(-1)[0].slice(0, 3) === "red")
+      ) || (
+        (this.state.squares[6].slice(-1)[0].slice(0, 3) === this.state.squares[7].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[6].slice(-1)[0].slice(0, 3) === this.state.squares[8].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[6].slice(-1)[0].slice(0, 3) === "red")
+      ) || (
+        (this.state.squares[0].slice(-1)[0].slice(0, 3) === this.state.squares[3].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[0].slice(-1)[0].slice(0, 3) === this.state.squares[6].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[0].slice(-1)[0].slice(0, 3) === "red")
+      ) || (
+        (this.state.squares[1].slice(-1)[0].slice(0, 3) === this.state.squares[4].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[1].slice(-1)[0].slice(0, 3) === this.state.squares[7].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[1].slice(-1)[0].slice(0, 3) === "red")
+      ) || (
+        (this.state.squares[2].slice(-1)[0].slice(0, 3) === this.state.squares[5].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[2].slice(-1)[0].slice(0, 3) === this.state.squares[8].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[2].slice(-1)[0].slice(0, 3) === "red")
+      ) || (
+        (this.state.squares[0].slice(-1)[0].slice(0, 3) === this.state.squares[4].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[0].slice(-1)[0].slice(0, 3) === this.state.squares[8].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[0].slice(-1)[0].slice(0, 3) === "red")
+      ) || (
+        (this.state.squares[2].slice(-1)[0].slice(0, 3) === this.state.squares[4].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[2].slice(-1)[0].slice(0, 3) === this.state.squares[6].slice(-1)[0].slice(0, 3))
+        && (this.state.squares[2].slice(-1)[0].slice(0, 3) === "red")
+      )
+    ) {
+      console.log("赤の勝ちです！！");
+      this.setState({finished: "red"});
+    } else if (
+      (
+        (this.state.squares[0].slice(-1)[0].slice(0, 4) === this.state.squares[1].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[0].slice(-1)[0].slice(0, 4) === this.state.squares[2].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[0].slice(-1)[0].slice(0, 4) === "blue")
+      ) || (
+        (this.state.squares[3].slice(-1)[0].slice(0, 4) === this.state.squares[4].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[3].slice(-1)[0].slice(0, 4) === this.state.squares[5].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[3].slice(-1)[0].slice(0, 4) === "blue")
+      ) || (
+        (this.state.squares[6].slice(-1)[0].slice(0, 4) === this.state.squares[7].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[6].slice(-1)[0].slice(0, 4) === this.state.squares[8].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[6].slice(-1)[0].slice(0, 4) === "blue")
+      ) || (
+        (this.state.squares[0].slice(-1)[0].slice(0, 4) === this.state.squares[3].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[0].slice(-1)[0].slice(0, 4) === this.state.squares[6].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[0].slice(-1)[0].slice(0, 4) === "blue")
+      ) || (
+        (this.state.squares[1].slice(-1)[0].slice(0, 4) === this.state.squares[4].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[1].slice(-1)[0].slice(0, 4) === this.state.squares[7].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[1].slice(-1)[0].slice(0, 4) === "blue")
+      ) || (
+        (this.state.squares[2].slice(-1)[0].slice(0, 4) === this.state.squares[5].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[2].slice(-1)[0].slice(0, 4) === this.state.squares[8].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[2].slice(-1)[0].slice(0, 4) === "blue")
+      ) || (
+        (this.state.squares[0].slice(-1)[0].slice(0, 4) === this.state.squares[4].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[0].slice(-1)[0].slice(0, 4) === this.state.squares[8].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[0].slice(-1)[0].slice(0, 4) === "blue")
+      ) || (
+        (this.state.squares[2].slice(-1)[0].slice(0, 4) === this.state.squares[4].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[2].slice(-1)[0].slice(0, 4) === this.state.squares[6].slice(-1)[0].slice(0, 4))
+        && (this.state.squares[2].slice(-1)[0].slice(0, 4) === "blue")
+      )
+    ) {
+      console.log("青の勝ちです！！");
+      this.setState({finished: "blue"});
+    }
+  }
+
   /*
     コマをマスに配置する
   */
   deploy(key) {
-    var stock, id, piece, stock_position;
+    var stock, id, piece;
     var whole_array = this.state.squares;
     var array = this.state.squares[key];
 
@@ -175,6 +256,8 @@ class App extends React.Component {
     } else if (this.state.turn === "blue") {
       this.setState({ blue: { piece: piece, stock: stock } });
     }
+
+    console.log(this.state);
 
   }
 
@@ -272,7 +355,7 @@ class App extends React.Component {
         </div>
 
         <table className="squares">
-          <div id="stack_red_box" className={this.state.red.stock ? "square_red_stock" : " "}>{this.showStock("red")}</div>
+          <div id="stack_red_box" className={this.state.red.stock ? "square_red_stock" : " "}>{this.showStock("red")} <span className="win_red">{this.state.finished === "red" ? "WIN!!" : ""}</span></div>
           <tbody>
             <tr>
               <td id="square0" onClick={() => { this.deploy(0) }}><span className={this.showColorToSquares(this.state.squares[0].slice(-1)[0])}>{this.showPieceToSquares(this.state.squares[0].slice(-1)[0].slice(-1))}</span></td>
@@ -290,7 +373,7 @@ class App extends React.Component {
               <td id="square8" onClick={() => { this.deploy(8) }}><span className={this.showColorToSquares(this.state.squares[8].slice(-1)[0])}>{this.showPieceToSquares(this.state.squares[8].slice(-1)[0].slice(-1))}</span></td>
             </tr>
           </tbody>
-          <div id="stack_blue_box" className={this.state.blue.stock ? "square_blue_stock" : " "}>{this.showStock("blue")}</div>
+          <div id="stack_blue_box" className={this.state.blue.stock ? "square_blue_stock" : " "}>{this.showStock("blue")} <span className="win_blue">{this.state.finished === "blue" ? "WIN!!" : ""}</span></div>
         </table>
 
         {/* 青チームのコマ */}
@@ -339,7 +422,6 @@ class App extends React.Component {
           {/* 青チームのターン */}
           <div className={(this.state.turn === "blue" ? "blue_turn" : " ")}></div>
         </div>
-
       </div>
     );
   }
