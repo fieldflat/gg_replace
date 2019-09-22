@@ -18,10 +18,27 @@ table {
   margin-top: 3em;
   margin-bottom: 3em;
 }
+
 td {
 	border: solid 3px;
-  width: 10em;
-  height: 10em;
+  width: 5em;
+  height: 5em;
+  text-align: center;
+  font-size: 32px;
+}
+
+.square_red {
+  padding: 2em;
+  background: red;
+  border-radius: 50%;
+  color: white;
+}
+
+.square_blue {
+  padding: 2em;
+  background: blue;
+  border-radius: 50%;
+  color: white;
 }
 
 /*
@@ -46,6 +63,7 @@ td {
   border-radius: 10px;
   font-size: 20px;
   font-weight: bold;
+  user-select: none;
 }
 
 .piece:hover {
@@ -71,4 +89,34 @@ td {
   position: relative;
   top: 6px;
   box-shadow: none;
+}
+
+.deployed {
+  opacity: 0.4 !important;
+  position: relative;
+  top: 6px;
+  box-shadow: none;
+}
+
+/*
+  ターン表示に関するCSS
+*/
+.red_turn {
+  margin: 0 auto;
+  width: 60%;
+  height: 1em;
+  background: red;
+}
+
+.blue_turn {
+  margin: 0 auto;
+  width: 60%;
+  height: 1em;
+  background: blue;
+}
+
+.not_turn {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: none;
 }
