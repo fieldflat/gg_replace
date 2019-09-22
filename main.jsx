@@ -11,6 +11,7 @@ class App extends React.Component {
                      stock: false,
                    },
                    turn: "red",
+                   stock_position: false,
                   };
   }
 
@@ -25,14 +26,10 @@ class App extends React.Component {
     stockとpieceを更新する
   */
   updateStockAndPiece(tmp_piece, tmp_stock, color, key) {
-    console.log("*** tmp_piece = " + tmp_piece);
-    console.log("*** tmp_stock = " + tmp_stock);
     if (tmp_stock === false) {
       if (this.isIndexContained(tmp_piece, key)) {
-        console.log("tmp_piece = " + tmp_piece);
         tmp_stock = key;
         tmp_piece.splice(tmp_piece.indexOf(tmp_stock), 1);
-        console.log("tmp_piece = " + tmp_piece);
       }
     } else {
       if (this.isIndexContained(tmp_piece, key)) {
@@ -68,7 +65,7 @@ class App extends React.Component {
       tmp_piece = this.state.blue.piece;
       tmp_stock = this.state.blue.stock;
     } else {
-      console.log("Error: togglePieceClass (invalid color)");
+
     }
 
     this.updateStockAndPiece(tmp_piece, tmp_stock, color, key)
@@ -83,15 +80,36 @@ class App extends React.Component {
     } else if(this.state.turn === "blue") {
       this.setState({ turn: "red" });
     } else {
-      console.log("Error: toggleTurn");
+
     }
+  }
+
+  /*
+    マス状の数字を選択した場合に使用する関数
+  */
+  selectPieceOnSquare(piece_array) {
+    var tmp_stock = false;
+
+    if(this.state.turn === "red") {
+      if(piece_array.slice(-1)[0].slice(0, 3) === "red") {
+        tmp_stock = piece_array.pop();
+        tmp_stock = tmp_stock.slice(-1);
+      }
+    } else if(this.state.turn === "blue") {
+      if (piece_array.slice(-1)[0].slice(0, 4) === "blue") {
+        tmp_stock = piece_array.pop();
+        tmp_stock = tmp_stock.slice(-1);
+      }
+    }
+    
+    return piece_array, tmp_stock;
   }
 
   /*
     コマをマスに配置する
   */
   deploy(key) {
-    var stock, id, piece;
+    var stock, id, piece, stock_position;
     var whole_array = this.state.squares;
     var array = this.state.squares[key];
 
@@ -104,41 +122,60 @@ class App extends React.Component {
       id = "blue" + stock;
       piece = this.state.blue.piece;
     }
-    console.log("id = " + id);
 
-    /*
-      コマを配置できるか判定
-    */
-    console.log("this.state.squares[key] = " + this.state.squares[key]);
-    console.log("this.state.squares[key].slice(-1)[0].slice(-1) = " + this.state.squares[key].slice(-1)[0].slice(-1));
-    console.log("stock = " + stock);
-
-
+    if ((this.state.stock_position === key) && !(this.state.stock_position === false)) {
+      array.push(id);
+      whole_array[key] = array;
+      stock = false;
+      this.setState({ stock_position: false });
+    }
     /*
       この条件(if)によりコマの配置が可能 → ターンを切り替える
     */
-    if ((parseInt(this.state.squares[key].slice(-1)[0].slice(-1), 10) < stock) && stock) {
+    else if ((parseInt(this.state.squares[key].slice(-1)[0].slice(-1), 10) < stock) && !(stock === false)) {
       array.push(id);
       whole_array[key] = array;
       this.toggleTurn();
       stock = false;
-    } else if (stock) {
-      piece = piece.concat(stock);
+      this.setState({ stock_position: false });
+    } 
+    else if (!(stock === false) && !(this.state.stock_position === false )){
+      array = this.state.squares[this.state.stock_position];
+      array.push(this.state.turn + stock);
+      whole_array[this.state.stock_position] = array;
       stock = false;
+      this.setState({ stock_position: false });
     }
-
+    else if (this.state.squares[key].slice(-1)[0] !== "p0" && (stock === false)) { /* ストックが存在しないが，数字のコマを選択したとき */
+      if ((this.state.squares[key].slice(-1)[0].slice(0, 3) === this.state.turn) || (this.state.squares[key].slice(-1)[0].slice(0, 4) === this.state.turn)){
+        this.setState({ stock_position: key });
+        array, stock = this.selectPieceOnSquare(this.state.squares[key]);
+        whole_array[key] = array;
+      }
+    }
+    else if (this.state.squares[key].slice(-1)[0] !== "p0" && !(stock === false)) {
+      if(this.state.turn === "red") {
+        piece.push(this.state.red.stock);
+        stock = false;
+      } else if(this.state.turn === "blue") {
+        piece.push(this.state.blue.stock);
+        stock = false;
+      } else {
+        console.log("Error: deploy");
+      }
+    }
 
     /*
       実際の配置処理
     */
     this.setState({squares: whole_array});
-    console.log(whole_array);
 
     if (this.state.turn === "red") {
       this.setState({ red: { piece: piece, stock: stock } });
     } else if (this.state.turn === "blue") {
       this.setState({ blue: { piece: piece, stock: stock } });
     }
+
   }
 
   /*
@@ -161,6 +198,25 @@ class App extends React.Component {
     } else {
       return " ";
     }
+  }
+
+  /*
+    ストックしているコマの表示
+  */
+  showStock(color) {
+    if(color === "red") {
+      if(this.state.red.stock) {
+        return this.state.red.stock;
+      }
+    } else if (color === "blue") {
+      if (this.state.blue.stock) {
+        return this.state.blue.stock;
+      }
+    } else {
+      console.log("Error: showStock");
+    }
+
+    return "";
   }
 
   render() {
@@ -216,6 +272,7 @@ class App extends React.Component {
         </div>
 
         <table className="squares">
+          <div id="stack_red_box" className={this.state.red.stock ? "square_red_stock" : " "}>{this.showStock("red")}</div>
           <tbody>
             <tr>
               <td id="square0" onClick={() => { this.deploy(0) }}><span className={this.showColorToSquares(this.state.squares[0].slice(-1)[0])}>{this.showPieceToSquares(this.state.squares[0].slice(-1)[0].slice(-1))}</span></td>
@@ -233,6 +290,7 @@ class App extends React.Component {
               <td id="square8" onClick={() => { this.deploy(8) }}><span className={this.showColorToSquares(this.state.squares[8].slice(-1)[0])}>{this.showPieceToSquares(this.state.squares[8].slice(-1)[0].slice(-1))}</span></td>
             </tr>
           </tbody>
+          <div id="stack_blue_box" className={this.state.blue.stock ? "square_blue_stock" : " "}>{this.showStock("blue")}</div>
         </table>
 
         {/* 青チームのコマ */}

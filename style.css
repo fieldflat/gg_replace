@@ -12,6 +12,10 @@
 /*
   ボード(squares)に関するCSS
 */
+.squares {
+  position: relative;
+}
+
 table {
   border-collapse: collapse;
   margin: 0 auto;
@@ -27,6 +31,34 @@ td {
   font-size: 32px;
 }
 
+tbody {
+  display: inline-block;
+}
+
+#stack_red_box {
+  width: 3em;
+  height: 3em;
+  display: inline-block;
+  margin-right: 3em;
+  position: relative;
+  top: 50%;
+  line-height: 3em;
+  padding: 1em;
+  font-size: 32px;
+}
+
+#stack_blue_box {
+  width: 3em;
+  height: 3em;
+  display: inline-block;
+  margin-left: 3em;
+  position: relative;
+  top: 50%;
+  line-height: 3em;
+  padding: 1em;
+  font-size: 32px;
+}
+
 .square_red {
   padding: 2em;
   background: red;
@@ -34,11 +66,31 @@ td {
   color: white;
 }
 
+.square_red_stock {
+  background: red;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  position: relative;
+  top: 50%;
+  vertical-align: middle;
+}
+
 .square_blue {
   padding: 2em;
   background: blue;
   border-radius: 50%;
   color: white;
+}
+
+.square_blue_stock {
+  background: blue;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  position: relative;
+  top: 50%;
+  vertical-align: middle;
 }
 
 /*
