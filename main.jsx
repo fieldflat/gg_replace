@@ -1,19 +1,45 @@
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { squares: [["p0"], ["p0"], ["p0"], ["p0"], ["p0"], ["p0"], ["p0"], ["p0"], ["p0"]],
-                   red: {
-                     piece: [1, 2, 3, 4],
-                     stock: false,
-                   },
-                   blue: {
-                     piece: [1, 2, 3, 4],
-                     stock: false,
-                   },
-                   turn: "red",
-                   stock_position: false,
-                   finished: false,
-                  };
+    this.state = {
+      squares: [["p0"], ["p0"], ["p0"], ["p0"], ["p0"], ["p0"], ["p0"], ["p0"], ["p0"]],
+      red: {
+        piece: [1, 2, 3, 4],
+        stock: false,
+      },
+      blue: {
+        piece: [1, 2, 3, 4],
+        stock: false,
+      },
+      turn: "red",
+      stock_position: false,
+      finished: false,
+    };
+  }
+
+  /*
+    リセットボタンの挙動
+  */
+  reset() {
+
+    var result = confirm("本当にリセットしますか？");
+
+    if (result) {
+      this.setState({
+        squares: [["p0"], ["p0"], ["p0"], ["p0"], ["p0"], ["p0"], ["p0"], ["p0"], ["p0"]],
+        red: {
+          piece: [1, 2, 3, 4],
+          stock: false,
+        },
+        blue: {
+          piece: [1, 2, 3, 4],
+          stock: false,
+        },
+        turn: "red",
+        stock_position: false,
+        finished: false,
+      });
+    }
   }
 
   /*
@@ -76,10 +102,10 @@ class App extends React.Component {
     ターンを変更する
   */
   toggleTurn() {
-    if(this.state.turn === "red") {
+    if (this.state.turn === "red") {
       this.setState({ turn: "blue" });
       this.isFinish();
-    } else if(this.state.turn === "blue") {
+    } else if (this.state.turn === "blue") {
       this.setState({ turn: "red" });
       this.isFinish();
     } else {
@@ -93,18 +119,18 @@ class App extends React.Component {
   selectPieceOnSquare(piece_array) {
     var tmp_stock = false;
 
-    if(this.state.turn === "red") {
-      if(piece_array.slice(-1)[0].slice(0, 3) === "red") {
+    if (this.state.turn === "red") {
+      if (piece_array.slice(-1)[0].slice(0, 3) === "red") {
         tmp_stock = piece_array.pop();
         tmp_stock = tmp_stock.slice(-1);
       }
-    } else if(this.state.turn === "blue") {
+    } else if (this.state.turn === "blue") {
       if (piece_array.slice(-1)[0].slice(0, 4) === "blue") {
         tmp_stock = piece_array.pop();
         tmp_stock = tmp_stock.slice(-1);
       }
     }
-    
+
     return piece_array, tmp_stock;
   }
 
@@ -145,7 +171,7 @@ class App extends React.Component {
       )
     ) {
       console.log("赤の勝ちです！！");
-      this.setState({finished: "red"});
+      this.setState({ finished: "red" });
     } else if (
       (
         (this.state.squares[0].slice(-1)[0].slice(0, 4) === this.state.squares[1].slice(-1)[0].slice(0, 4))
@@ -182,7 +208,7 @@ class App extends React.Component {
       )
     ) {
       console.log("青の勝ちです！！");
-      this.setState({finished: "blue"});
+      this.setState({ finished: "blue" });
     }
   }
 
@@ -194,11 +220,11 @@ class App extends React.Component {
     var whole_array = this.state.squares;
     var array = this.state.squares[key];
 
-    if(this.state.turn === "red") {
+    if (this.state.turn === "red") {
       stock = this.state.red.stock;
       id = "red" + stock;
       piece = this.state.red.piece;
-    } else if(this.state.turn === "blue") {
+    } else if (this.state.turn === "blue") {
       stock = this.state.blue.stock;
       id = "blue" + stock;
       piece = this.state.blue.piece;
@@ -219,8 +245,8 @@ class App extends React.Component {
       this.toggleTurn();
       stock = false;
       this.setState({ stock_position: false });
-    } 
-    else if (!(stock === false) && !(this.state.stock_position === false )){
+    }
+    else if (!(stock === false) && !(this.state.stock_position === false)) {
       array = this.state.squares[this.state.stock_position];
       array.push(this.state.turn + stock);
       whole_array[this.state.stock_position] = array;
@@ -228,17 +254,17 @@ class App extends React.Component {
       this.setState({ stock_position: false });
     }
     else if (this.state.squares[key].slice(-1)[0] !== "p0" && (stock === false)) { /* ストックが存在しないが，数字のコマを選択したとき */
-      if ((this.state.squares[key].slice(-1)[0].slice(0, 3) === this.state.turn) || (this.state.squares[key].slice(-1)[0].slice(0, 4) === this.state.turn)){
+      if ((this.state.squares[key].slice(-1)[0].slice(0, 3) === this.state.turn) || (this.state.squares[key].slice(-1)[0].slice(0, 4) === this.state.turn)) {
         this.setState({ stock_position: key });
         array, stock = this.selectPieceOnSquare(this.state.squares[key]);
         whole_array[key] = array;
       }
     }
     else if (this.state.squares[key].slice(-1)[0] !== "p0" && !(stock === false)) {
-      if(this.state.turn === "red") {
+      if (this.state.turn === "red") {
         piece.push(this.state.red.stock);
         stock = false;
-      } else if(this.state.turn === "blue") {
+      } else if (this.state.turn === "blue") {
         piece.push(this.state.blue.stock);
         stock = false;
       } else {
@@ -249,7 +275,7 @@ class App extends React.Component {
     /*
       実際の配置処理
     */
-    this.setState({squares: whole_array});
+    this.setState({ squares: whole_array });
 
     if (this.state.turn === "red") {
       this.setState({ red: { piece: piece, stock: stock } });
@@ -265,7 +291,7 @@ class App extends React.Component {
     マスに数字を表示する
   */
   showPieceToSquares(piece) {
-    if(piece > 0) {
+    if (piece > 0) {
       return piece;
     }
   }
@@ -274,7 +300,7 @@ class App extends React.Component {
     マスの数字の色を指定する
   */
   showColorToSquares(piece) {
-    if(piece.slice(0, 3) === "red") {
+    if (piece.slice(0, 3) === "red") {
       return "square_red";
     } else if (piece.slice(0, 4) === "blue") {
       return "square_blue";
@@ -287,8 +313,8 @@ class App extends React.Component {
     ストックしているコマの表示
   */
   showStock(color) {
-    if(color === "red") {
-      if(this.state.red.stock) {
+    if (color === "red") {
+      if (this.state.red.stock) {
         return this.state.red.stock;
       }
     } else if (color === "blue") {
@@ -304,7 +330,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="main">
+      <div className={"main " + ( this.state.finished ? "finished" : " " )}>
 
         {/* 赤チームのコマ */}
         <div className={"piece_field " + (this.state.turn === "red" ? " " : "not_turn ")} id="red_piece_field">
@@ -313,43 +339,43 @@ class App extends React.Component {
           <div className={(this.state.turn === "red" ? "red_turn" : " ")}></div>
 
           <p className={
-                        "piece red_piece "
-                        + (this.isIndexContained(this.state.red.piece, 1) ? " " : " stocked ")
-                       }
-             id="red1"
-             onClick={
-               () => { this.togglePieceClass("red", 1) }
-             }>
+            "piece red_piece "
+            + (this.isIndexContained(this.state.red.piece, 1) ? " " : " stocked ")
+          }
+            id="red1"
+            onClick={
+              () => { this.togglePieceClass("red", 1) }
+            }>
             1
           </p>
           <p className={
-                        "piece red_piece "
-                        + (this.isIndexContained(this.state.red.piece, 2) ? " " : " stocked ")
-                       }
-             id="red2"
-             onClick={
-               () => { this.togglePieceClass("red", 2) }
-             }>
+            "piece red_piece "
+            + (this.isIndexContained(this.state.red.piece, 2) ? " " : " stocked ")
+          }
+            id="red2"
+            onClick={
+              () => { this.togglePieceClass("red", 2) }
+            }>
             2
           </p>
           <p className={
-                        "piece red_piece "
-                        + (this.isIndexContained(this.state.red.piece, 3) ? " " : " stocked ")
-                       }
-             id="red3"
-             onClick={
-               () => { this.togglePieceClass("red", 3) }
-             }>
+            "piece red_piece "
+            + (this.isIndexContained(this.state.red.piece, 3) ? " " : " stocked ")
+          }
+            id="red3"
+            onClick={
+              () => { this.togglePieceClass("red", 3) }
+            }>
             3
           </p>
           <p className={
-                        "piece red_piece "
-                        + (this.isIndexContained(this.state.red.piece, 4) ? " " : " stocked ")
-                       }
-             id="red4"
-             onClick={
-               () => { this.togglePieceClass("red", 4) }
-             }>
+            "piece red_piece "
+            + (this.isIndexContained(this.state.red.piece, 4) ? " " : " stocked ")
+          }
+            id="red4"
+            onClick={
+              () => { this.togglePieceClass("red", 4) }
+            }>
             4
           </p>
         </div>
@@ -421,6 +447,10 @@ class App extends React.Component {
 
           {/* 青チームのターン */}
           <div className={(this.state.turn === "blue" ? "blue_turn" : " ")}></div>
+        </div>
+
+        <div className="reset" onClick={() => { this.reset() }}>
+          <span>Reset</span>
         </div>
       </div>
     );

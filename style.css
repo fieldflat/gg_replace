@@ -39,7 +39,7 @@ tbody {
   width: 3em;
   height: 3em;
   display: inline-block;
-  margin-right: 3em;
+  margin-right: 1em;
   position: relative;
   top: 50%;
   line-height: 3em;
@@ -51,7 +51,7 @@ tbody {
   width: 3em;
   height: 3em;
   display: inline-block;
-  margin-left: 3em;
+  margin-left: 1em;
   position: relative;
   top: 50%;
   line-height: 3em;
@@ -188,4 +188,36 @@ tbody {
   color: blue;
   text-align: center;
   margin: 0 auto;
+}
+
+/*
+ reset ボタン
+*/
+.reset {
+  float: right;
+  margin-right: 3em;
+  padding: 1em;
+  border: 1px solid black;
+  border-radius: 10px;
+  color: white;
+  background: grey;
+  box-shadow: 0 3px #414141;
+  cursor: pointer;
+}
+
+.reset:hover {
+  opacity: 0.7;
+}
+
+.finished #red_piece_field  {
+  pointer-events: none;
+  cursor: none;
+}
+.finished #blue_piece_field {
+  pointer-events: none;
+  cursor: none;
+}
+.finished .squares {
+  pointer-events: none;
+  cursor: none;
 }
