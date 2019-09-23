@@ -53,24 +53,42 @@ class App extends React.Component {
     stockとpieceを更新する
   */
   updateStockAndPiece(tmp_piece, tmp_stock, color, key) {
+    /*
+      選択中の(pieceからの)コマが存在しない場合
+      → stockとpieceを更新する
+    */
     if (tmp_stock === false) {
       if (this.isIndexContained(tmp_piece, key)) {
         tmp_stock = key;
         tmp_piece.splice(tmp_piece.indexOf(tmp_stock), 1);
       }
-    } else {
+    }
+
+    /*
+      選択中の(pieceからの)コマが存在する場合
+    */
+    else {
+      /*
+        pieceの異なるコマを選択した場合
+        → stockとpieceを更新する
+      */
       if (this.isIndexContained(tmp_piece, key)) {
         tmp_piece.unshift(tmp_stock);
         tmp_stock = key;
         tmp_piece.splice(tmp_piece.indexOf(tmp_stock), 1);
-      } else if (tmp_stock === key) {
+      }
+      /*
+        選択中のコマを再び選択した場合
+        → 選択する前と同じ状況になるようstockとpieceを更新する
+      */
+      else if (tmp_stock === key) {
         tmp_piece = tmp_piece.concat(tmp_stock);
         tmp_stock = false;
       }
     }
 
     if (color === "red") {
-      this.setState({ red: { piece: tmp_piece, stock: tmp_stock } }); // 片方の指定のみ（pieceのみ or stockのみ)だとundefinedになってしまう！
+      this.setState({ red: { piece: tmp_piece, stock: tmp_stock } });
     } else if (color === "blue") {
       this.setState({ blue: { piece: tmp_piece, stock: tmp_stock } });
     }
@@ -335,6 +353,8 @@ class App extends React.Component {
         {/* 赤チームのコマ */}
         <div className={"piece_field " + (this.state.turn === "red" ? " " : "not_turn ")} id="red_piece_field">
 
+          <div id="red_name">ゲスト(赤)さん</div>
+
           {/* 赤チームのターン */}
           <div className={(this.state.turn === "red" ? "red_turn" : " ")}></div>
 
@@ -447,6 +467,8 @@ class App extends React.Component {
 
           {/* 青チームのターン */}
           <div className={(this.state.turn === "blue" ? "blue_turn" : " ")}></div>
+
+          <div id="blue_name">ゲスト(青)さん</div>
         </div>
 
         <div className="reset" onClick={() => { this.reset() }}>
